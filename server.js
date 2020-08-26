@@ -1,18 +1,16 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const Todo = require('./models/todo');
 
-// database connector
-const dbURL = `mongodb+srv://todo:QKV76isGEW9GW7Ra@todo.v0zv3.mongodb.net/todo?retryWrites=true&w=majority`;
+const todoController = require('./controllers/todoController');
 
-// Port
-const PORT = 3000 || process.env.PORT;
+const dbURL =
+  'mongodb+srv://todos:rZwUlDcJRX5MiIy0@todos.lva32.mongodb.net/todos?retryWrites=true&w=majority';
 
 mongoose
   .connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => {
-    app.listen(PORT, () => console.log(`Listening to port: ${PORT}`));
+    app.listen(3000);
   })
   .catch((err) => console.log(err));
 
@@ -27,32 +25,4 @@ app.get('/', (req, res) => {
   res.redirect('/todo');
 });
 
-app.get('/todo', (req, res) => {
-  Todo.find()
-    .sort({ createdAt: -1 })
-    .then((result) =>
-      res.render('index', { title: 'All todos', todos: result })
-    );
-  console.log(req.url, req.method);
-});
-
-app.post('/todo', (req, res) => {
-  const todo = new Todo(req.body);
-  todo
-    .save()
-    .then((result) => res.redirect('/todo'))
-    .catch((err) => console.log(err));
-});
-
-app.delete('/todo/:id', (req, res) => {
-  const id = req.params.id;
-  Todo.findByIdAndDelete(id)
-    .then((result) => {
-      res.json({ redirect: '/todo' });
-    })
-    .catch((err) => res.status(404).render('404', { title: '404' }));
-});
-
-app.use((req, res) => {
-  res.status(404).render('404', { title: '404' });
-});
+todoController(app);

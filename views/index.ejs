@@ -4,7 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo || <%= title%></title>
-   
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+      integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
+      crossorigin="anonymous"
+    />
     <link rel="shortcut icon" type="img/png" href="img/favicon.png" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -25,26 +30,25 @@
           placeholder="eg. watch new series in netflix"
           required
         />
-        <button type="submit">submit</button>
+        <button type="submit"><i class="far fa-plus-square"></i></button>
       </form>
-
 
       <section class="todo-table">
         <% if(todos.length > 0){%>
+        <ul>
           <%todos.forEach(todo=> { %>
-          <ul>
           <li>
             <span title="createdAt: <%= todo.createdAt.toLocaleDateString()%>"
               ><%= todo.todo%></span
             >
 
             <a id="delete" data-doc="<%= todo._id%>" title="delete"
-              >del</i
+              ><i class="fas fa-trash-alt"></i
             ></a>
           </li>
 
-        </ul>
           <%})%>
+        </ul>
         <%} else {%>
         <h3>No more todos</h3>
         <%}%>

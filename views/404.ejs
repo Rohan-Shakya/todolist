@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo || <%= title%></title>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+      integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
+      crossorigin="anonymous"
+    />
     <link rel="shortcut icon" type="img/png" href="img/favicon.png" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -12,17 +18,61 @@
       <h1>TODO LIST</h1>
     </nav>
     <section id="todo-list">
-      <div class="error">
-        <h1>OOPS :( Sorry</h1>
-        <button id="error-btn"><a href="/">Back to Home</a></button>
-      </div>
+      <header>
+        <h2 for="todo">Add today's todo</h2>
+        <h4>Date: <span id="date"></span></h4>
+      </header>
+      <form action="/todo" method="POST" class="todo-form">
+        <br />
+        <input
+          type="text"
+          name="todo"
+          placeholder="eg. watch new series in netflix"
+          required
+        />
+        <button type="submit"><i class="far fa-plus-square"></i></button>
+      </form>
+
+      <section class="todo-table">
+        <% if(todos.length > 0){%>
+        <ul>
+          <%todos.forEach(todo=> { %>
+          <li>
+            <span title="createdAt: <%= todo.createdAt.toLocaleDateString()%>"
+              ><%= todo.todo%></span
+            >
+
+            <a id="delete" data-doc="<%= todo._id%>" title="delete"
+              ><i class="fas fa-trash-alt"></i
+            ></a>
+          </li>
+
+          <%})%>
+        </ul>
+        <%} else {%>
+        <h3>No more todos</h3>
+        <%}%>
+      </section>
     </section>
 
     <!-- Javascript -->
     <script>
       const date = document.querySelector('#date');
-
+      const trashes = document.querySelectorAll('#delete');
       date.innerHTML = new Date().toLocaleDateString();
+      trashes.forEach((trash) => {
+        trash.addEventListener('click', (e) => {
+          const item = e.target.innerHTML.replace(/ /g, '-');
+          const endpoint = `/todo/${trash.dataset.doc}`;
+
+          fetch(endpoint, {
+            method: 'DELETE',
+          })
+            .then((res) => res.json())
+            .then((data) => (window.location.href = data.redirect))
+            .catch((err) => console.log(err));
+        });
+      });
     </script>
   </body>
 </html>
