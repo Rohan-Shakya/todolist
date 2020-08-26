@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 
+// PORT
+const PORT = 3000 || process.env.PORT;
+
 const todoController = require('./controllers/todoController');
 
 const dbURL =
@@ -10,7 +13,7 @@ const dbURL =
 mongoose
   .connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => {
-    app.listen(3000);
+    app.listen(PORT, () => console.log(`listening to port: ${PORT}`));
   })
   .catch((err) => console.log(err));
 
