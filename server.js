@@ -7,6 +7,9 @@ const PORT = 3000 || process.env.PORT;
 // register view engine
 app.set('view engine', 'ejs');
 
+// middleware and static files
+app.use(express.static('public'));
+
 app.get('/', (req, res) => {
   const todos = [
     { id: 1, todo: 'Buying' },
