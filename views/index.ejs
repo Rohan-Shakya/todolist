@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo || <%= title%></title>
+
+
+  </head>
+  <body>
+    <nav>
+      <h1>TODO LIST</h1>
+    </nav>
+    <section id="todo-list">
+      <header>
+        <h2 for="todo">Add today's todo</h2>
+        <h4>Date: <span id="date"></span></h4>
+      </header>
+      <form class="todo-form">
+        <br />
+        <input
+          type="text"
+          name="todo"
+          placeholder="eg. watch new series in netflix"
+          required
+        />
+        <button type="submit">delete</i></button>
+      </form>
+
+      <section class="todo-table">
+        <% if(todos.length > 0){%>
+        <ul>
+          <%todos.forEach(todo=> { %>
+          <li>
+            <span 
+              ><%= todo.todo%></span
+            >
+
+            <a id="delete" data-doc="<%= todos._id%>" title="delete"
+              >del</i
+            ></a>
+          </li>
+
+          <%})%>
+        </ul>
+        <%} else {%>
+        <h3>No more todos</h3>
+        <%}%>
+      </section>
+    </section>
+
+    <!-- Javascript -->
+    <script>
+      const date = document.querySelector('#date');
+     
+      date.innerHTML = new Date().toLocaleDateString();
+     
+    </script>
+  </body>
+</html>
