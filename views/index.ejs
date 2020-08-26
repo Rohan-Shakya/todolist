@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo || <%= title%></title>
+   
     <link rel="shortcut icon" type="img/png" href="img/favicon.png" />
     <link rel="stylesheet" href="css/style.css" />
-
   </head>
   <body>
     <nav>
@@ -17,7 +17,7 @@
         <h2 for="todo">Add today's todo</h2>
         <h4>Date: <span id="date"></span></h4>
       </header>
-      <form class="todo-form">
+      <form action="/todo" method="POST" class="todo-form">
         <br />
         <input
           type="text"
@@ -25,25 +25,26 @@
           placeholder="eg. watch new series in netflix"
           required
         />
-        <button type="submit">delete</i></button>
+        <button type="submit">submit</button>
       </form>
+
 
       <section class="todo-table">
         <% if(todos.length > 0){%>
-        <ul>
           <%todos.forEach(todo=> { %>
+          <ul>
           <li>
-            <span 
+            <span title="createdAt: <%= todo.createdAt.toLocaleDateString()%>"
               ><%= todo.todo%></span
             >
 
-            <a id="delete" data-doc="<%= todos._id%>" title="delete"
+            <a id="delete" data-doc="<%= todo._id%>" title="delete"
               >del</i
             ></a>
           </li>
 
-          <%})%>
         </ul>
+          <%})%>
         <%} else {%>
         <h3>No more todos</h3>
         <%}%>
@@ -53,9 +54,21 @@
     <!-- Javascript -->
     <script>
       const date = document.querySelector('#date');
-     
+      const trashes = document.querySelectorAll('#delete');
       date.innerHTML = new Date().toLocaleDateString();
-     
+      trashes.forEach((trash) => {
+        trash.addEventListener('click', (e) => {
+          const item = e.target.innerHTML.replace(/ /g, '-');
+          const endpoint = `/todo/${trash.dataset.doc}`;
+
+          fetch(endpoint, {
+            method: 'DELETE',
+          })
+            .then((res) => res.json())
+            .then((data) => (window.location.href = data.redirect))
+            .catch((err) => console.log(err));
+        });
+      });
     </script>
   </body>
 </html>
