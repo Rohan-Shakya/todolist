@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const config = require('config');
 
 // PORT
 const PORT = process.env.PORT || 3000;
 
 const todoController = require('./controllers/todoController');
 
-const dbURL =
-  'mongodb+srv://todos:rZwUlDcJRX5MiIy0@todos.lva32.mongodb.net/todos?retryWrites=true&w=majority';
+const dbURL = config.mongoURL;
 
 mongoose
   .connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -28,4 +28,9 @@ app.get('/', (req, res) => {
   res.redirect('/todo');
 });
 
-todoController(app);
+// todoController(app);
+app.use('/todo', todoController);
+
+app.use((req, res) => {
+  res.status(404).render('404', { title: '404' });
+});
